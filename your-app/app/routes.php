@@ -42,6 +42,13 @@ $app->post('/signup_proc', 'App\Controller\BackendController:signup_proc')
 $app->post('/check_user', 'App\Controller\BackendController:check_user')
     ->setName('check_user');
 
+//check_certificatioin
+$app->post('/check_certification', 'App\Controller\BackendController:check_certification')
+    ->setName('check_certification');
+
+//sign_in
+$app->post('/signin_proc', 'App\Controller\BackendController:signin_proc')
+    ->setName('signin_proc');
 
 
 

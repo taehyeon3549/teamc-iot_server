@@ -86,15 +86,15 @@
 				alert("인증버튼");
 			}
 			//등록버튼
-			if(val == 2){
-				alert("등록버튼");
+			/*if(val == 2){
+				//alert("등록버튼");
 				if(check(ff)==true){
 					ff.action="/signup_proc";
 					ff.submit();
 				}else{
 					return;
 				}
-			}
+			}*/
 		}
 	</script>
 </head>
@@ -248,36 +248,30 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() {
-	$("#btnSubmit").on('click',function(){
-		alert("sign_up_btn_clicked");
 
-		var formData = {
+
+ $("#btnSubmit").on('click',function(){
+	$.ajax({
+	  method: "POST",
+	  url: "/signup_proc",
+	  data: {
 			"id": $('input[name=id]').val(),
 			"name": $('input[name=name]').val(),
 			"password": $('input[name=password]').val(),
 			"birth": $('input[name=birth]').val(),
 			"gender": $('input[name=gender]:checked').val(),
 			"emergency": $('input[name=emergency]').val()
-		};
-
-		const serialize_form = form => JSON.stringify(formData);
-
-		//json이 보낼 파일
-		const json = serialize_form(this);
-		console.log(json);		
-		
-		$.ajax({
-			url: 'http://teamc-iot.calit2.net/signup_proc',
-			data: json,
-			type: "POST",
-			dataType: 'json',
-			success : function(data, status, xhr) { 
-				console.log(data); 
-			}
-		})
-		
-	});
+		}
+	}).done(function( msg ) {
+	    //If sign_up success, show up the sign in page
+	    if(msg.message == 0){
+	    	alert("Welcome, Now you are our member!!");
+	    	location.href = "/sign_in";
+	    }else{
+	    	alert("Your account is already exist. please check your account!!");
+	    	location.href = "/sign_up";
+	    }
+	});	
 });
   
 </script>

@@ -86,4 +86,51 @@ final class BackendController extends BaseController
                 ->write(json_encode($result, JSON_NUMERIC_CHECK));
 		
 	}
+
+//Certification check
+	public function check_certification(Request $request, Response $response, $args)
+    {
+		$result['header'] = "Test";
+		$result['message'] = "0";	
+		
+
+		return $response->withStatus(200)
+                ->withHeader('Content-Type', 'application/json')
+                ->write(json_encode($result, JSON_NUMERIC_CHECK));
+		
+	}
+
+//signin_proc
+	public function signin_proc(Request $request, Response $response, $args)
+    {
+    	//Get the User's info in sign_in page(id, password)
+		$info = [];
+		$info['email'] = $request->getParsedBody()['id'];
+		$info['pw'] = $request->getParsedBody()['pw'];
+
+		//Array of put the result
+		$result = [];
+		$temp = $this->BackendModel->login($info['email']);
+	
+		//Insert the user's info in DB and Check, is success
+		if(!$temp['hashed']){
+			//Account is not exsit
+			$result['header'] = "login_account is not exsit";
+			$result['message'] = "2";
+		}else{	
+			if(password_verify($info['pw'], $temp['hashed'])){
+				//Login success!!
+				$result['header'] = "login_success";
+				$result['message'] = "0";
+			}else{
+				//Login fail!!
+				$result['header'] = "login_password_wrong";
+				$result['message'] = "1";
+			}
+		}
+
+		return $response->withStatus(200)
+                ->withHeader('Content-Type', 'application/json')
+                ->write(json_encode($result, JSON_NUMERIC_CHECK));
+	}
 }
